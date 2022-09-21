@@ -1,6 +1,6 @@
+const fs = require('fs');
 const inquirer = require('inquirer');
-// const fs = require('fs');
-// const generatePage = require('./src/page-template');
+const generatePage = require('./src/page_template.js');
 
 // const pageHTML = generatePage(name, github);
 
@@ -48,7 +48,7 @@ const promptUser = () => {
         name: "confirmAbout",
         message: 'Would you like to enter some information about yourself for an "about" section?',
         default: true 
-        }      
+        },
         {
         type: 'input',
         name: 'about',
@@ -155,11 +155,15 @@ portfolioData.projects = [];
         }
     });
   };
-
-
-
-promptUser()
+ 
+  promptUser()
   .then(promptProject)
   .then(portfolioData => {
-    console.log(portfolioData);
+    const pageHTML = generatePage(portfolioData);
+
+    fs.writeFile('./index.html', pageHTML, err => {
+      if (err) throw new Error(err);
+
+      console.log('Page created! Check out index.html in this directory to see it!');
+    });
   });
